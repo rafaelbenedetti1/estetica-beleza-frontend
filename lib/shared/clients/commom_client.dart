@@ -19,20 +19,8 @@ class CommomClient {
     return response;
   }
 
-  static Future<http.Response> postRequest(String url, String dropdown, Map data, String token,
+  static Future<http.Response> postRequest(String url, Map data, String token,
       {Duration timeout = const Duration(seconds: 10)}) async {
-    if (dropdown != url && dropdown.isNotEmpty) {
-      var body;
-      if (data != null) body = json.encode(data);
-      var headers = {
-        'Content-Type': 'application/json',
-      };
-      if (token != null) {
-        headers['Authorization'] = "Bearer $token";
-      }
-      http.Response response = await http.post(Uri.parse(dropdown), body: body, headers: headers).timeout(timeout);
-      return response;
-    } else {
       var body;
       if (data != null) body = json.encode(data);
       var headers = {
@@ -43,7 +31,6 @@ class CommomClient {
       }
       http.Response response = await http.post(Uri.parse(url), body: body, headers: headers).timeout(timeout);
       return response;
-    }
   }
 
   static Future<http.Response> deleteRequest(String url, Map data, String token,
