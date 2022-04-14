@@ -10,6 +10,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_shapes/flutter_shapes.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/tables/services.dart';
 
@@ -22,12 +23,13 @@ class SchedulePage extends StatefulWidget {
 
 class _SchedulePageState extends State<SchedulePage> {
   final _formKey = GlobalKey<FormState>();
-  List<String> items = ['Mão', 'Pé', 'Mão e Pé,'];
   String? selectedValue;
+  String? time = '';
   List<dynamic>? servicos;
   List<Service>? services;
   List<DropdownMenuItem> listCombo = [];
   List<dynamic> professionalsList = [];
+  DateTime? _dateTime;
   @override
   void initState() {
     super.initState();
@@ -44,6 +46,9 @@ class _SchedulePageState extends State<SchedulePage> {
         value: p.servico,
       ));
     });
+    setState(() {
+      listCombo;
+    });
     print(services);
   }
 
@@ -51,6 +56,7 @@ class _SchedulePageState extends State<SchedulePage> {
     var professionals = await _buscarProfessionals();
     print(professionals);
     setState(() {
+      professionalsList.clear();
       professionalsList.addAll(professionals);
     });
   }
@@ -59,128 +65,113 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget build(BuildContext context) {
     Size _pageSize = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 192, 171, 101),
       appBar: TopAppBar(),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        color: Color.fromRGBO(187, 161, 79, 40),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Column(
-            children: [
-              Text('Agendar Horário',
-                  style: TextStyle(
-                      fontFamily: 'DancingScript',
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[900])),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-              ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.grey[900],
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      margin: EdgeInsets.only(top: 15, left: 15, right: 15),
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 5, bottom: 10, top: 10, left: 5),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          cursorColor: Colors.white,
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(187, 161, 79, 40))),
-                              focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(187, 161, 79, 40))),
-                              hintText: "Informe o Nome Completo",
-                              prefixIcon: Icon(AntDesign.user,
-                                  color: Color.fromRGBO(187, 161, 79, 40)),
-                              hintStyle: TextStyle(
-                                  fontSize: 18,
-                                  color: Color.fromRGBO(187, 161, 79, 40)),
-                              hoverColor: Colors.white,
-                              fillColor: Colors.white,
-                              labelText: "Nome",
-                              labelStyle: TextStyle(
-                                  color: Color.fromRGBO(187, 161, 79, 40))),
-                          style: TextStyle(
-                              fontSize: 18, fontFamily: 'DancingScript'),
-                        ),
-                      ),
-                    ),
-                    Card(
-                      color: Colors.grey[900],
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      margin: EdgeInsets.only(top: 15, left: 15, right: 15),
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 5, bottom: 20, top: 10, left: 5),
-                        child: DropdownButtonFormField2<dynamic>(
-                          decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(187, 161, 79, 40))),
-                              focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color:
-                                          Color.fromRGBO(187, 161, 79, 40)))),
-                          dropdownDecoration:
-                              BoxDecoration(color: Colors.grey[900]),
-                          style: TextStyle(
-                            color: Color.fromRGBO(187, 161, 79, 40),
-                          ),
-                          iconDisabledColor: Color.fromRGBO(187, 161, 79, 40),
-                          iconEnabledColor: Color.fromRGBO(187, 161, 79, 40),
-                          dropdownElevation: 24,
-                          isExpanded: true,
-                          hint: Padding(
-                            padding: const EdgeInsets.only(left: 12),
-                            child: Row(
-                              children: [
-                                Icon(MaterialCommunityIcons.hair_dryer,
-                                    color: Color.fromRGBO(187, 161, 79, 40)),
-                                SizedBox(
-                                  width: 14,
-                                ),
-                                Text('Selecione o Serviço',
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(187, 161, 79, 40),
-                                        fontFamily: 'DancingScript',
-                                        fontSize: 18)),
-                              ],
-                            ),
-                          ),
-                          // value: ,
-                          items: listCombo,
-                          value: selectedValue,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedValue = value;
-                              _buscaProfissionais();
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-                child: Container(
-                  height: 300,
-                  width: double.infinity,
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Text('Agendar Horário',
+                style: TextStyle(
+                    fontFamily: 'DancingScript',
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[900])),
+            SizedBox(height: 20),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.grey[900]),
+                onPressed: () async {
+                  _dateTime = await showDatePicker(
+                    context: context,
+                    initialDate:
+                        _dateTime == null ? DateTime.now() : _dateTime!,
+                    firstDate: DateTime(2010),
+                    lastDate: DateTime(2025),
+                  );
+                  setState(() {
+                    time = DateFormat('dd-MM-yyy').format(_dateTime!);
+                  });
+                },
+                child: Text('Selecione a data',
+                    style: TextStyle(
+                        color: Color.fromRGBO(187, 161, 79, 40),
+                        fontFamily: 'DancingScript',
+                        fontSize: 18))),
+            sizedBox(),
+            Text(
+              '$time',
+              style: TextStyle(
+                        color: Colors.grey[900],
+                        fontFamily: 'DancingScript',
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)
+            ),
+            sizedBox(),
+            Column(
+              children: [
+                Card(
                   color: Colors.grey[900],
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        right: 5, bottom: 20, top: 10, left: 5),
+                    child: DropdownButtonFormField2<dynamic>(
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromRGBO(187, 161, 79, 40))),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromRGBO(187, 161, 79, 40)))),
+                      dropdownDecoration:
+                          BoxDecoration(color: Colors.grey[900]),
+                      style: TextStyle(
+                        color: Color.fromRGBO(187, 161, 79, 40),
+                      ),
+                      iconDisabledColor: Color.fromRGBO(187, 161, 79, 40),
+                      iconEnabledColor: Color.fromRGBO(187, 161, 79, 40),
+                      dropdownElevation: 24,
+                      isExpanded: true,
+                      hint: Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Row(
+                          children: [
+                            Icon(MaterialCommunityIcons.hair_dryer,
+                                color: Color.fromRGBO(187, 161, 79, 40)),
+                            SizedBox(
+                              width: 14,
+                            ),
+                            Text('Selecione o Serviço',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(187, 161, 79, 40),
+                                    fontFamily: 'DancingScript',
+                                    fontSize: 18)),
+                          ],
+                        ),
+                      ),
+                      // value: ,
+                      items: listCombo,
+                      value: selectedValue,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValue = value;
+                          _buscaProfissionais();
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                child: Flexible(
                   child: ListView.builder(
                     itemCount: professionalsList.length,
                     itemBuilder: (context, index) {
@@ -231,12 +222,20 @@ class _SchedulePageState extends State<SchedulePage> {
                     },
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
+  }
+
+  sizedBox() {
+    if(time == '') {
+      return SizedBox(height: 1);
+    } else {
+      return SizedBox(height: 20);
+    }
   }
 
   _buscarProfessionals() async {
